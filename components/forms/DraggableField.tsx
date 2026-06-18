@@ -3,8 +3,8 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, Type, Mail, Phone, Hash, AlignLeft, ChevronDown, CheckSquare, Calendar, Paperclip } from 'lucide-react';
-import { Switch } from '@/app/components/ui/switch';
-import { Input } from '@/app/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import type { FormField } from '@/models/Form';
 
 const TYPE_ICONS: Record<FormField['type'], React.ComponentType<{ className?: string }>> = {

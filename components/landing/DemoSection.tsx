@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/app/components/ui/button';
-import { Textarea } from '@/app/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { Sparkles, Zap, ExternalLink, Loader2 } from 'lucide-react';
-import { FormPreview } from '@/app/components/forms/FormPreview';
+import { FormPreview } from '@/components/forms/FormPreview';
 import type { FormField } from '@/models/Form';
 
 interface GeneratedSchema {

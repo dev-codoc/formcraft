@@ -1,8 +1,8 @@
-import { HeroSection } from '@/app/components/landing/HeroSection';
-import { FeaturesSection } from '@/app/components/landing/FeaturesSection';
-import { HowItWorksSection } from '@/app/components/landing/HowItWorksSection';
-import { DemoSection } from '@/app/components/landing/DemoSection';
-import { CTASection } from '@/app/components/landing/CTASection';
+import { HeroSection } from '@/components/landing/HeroSection';
+import { FeaturesSection } from '@/components/landing/FeaturesSection';
+import { HowItWorksSection } from '@/components/landing/HowItWorksSection';
+import { DemoSection } from '@/components/landing/DemoSection';
+import { CTASection } from '@/components/landing/CTASection';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 

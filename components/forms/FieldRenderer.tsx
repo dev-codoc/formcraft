@@ -1,16 +1,16 @@
 'use client';
 
-import { Input } from '@/app/components/ui/input';
-import { Textarea } from '@/app/components/ui/textarea';
-import { Label } from '@/app/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/app/components/ui/select';
-import { Checkbox } from '@/app/components/ui/checkbox';
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { FormField } from '@/models/Form';
 
 interface FieldRendererProps {

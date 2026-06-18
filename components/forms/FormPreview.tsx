@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { FieldRenderer } from './FieldRenderer';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import type { FormField } from '@/models/Form';
