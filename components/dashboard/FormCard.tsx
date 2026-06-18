@@ -65,7 +65,7 @@ export function FormCard({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="text-[#52525B] hover:text-white transition-colors flex-shrink-0">
+            <button className="text-[#52525B] hover:text-white transition-colors shrink-0">
               <MoreVertical className="w-4 h-4" />
             </button>
           </DropdownMenuTrigger>

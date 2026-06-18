@@ -211,7 +211,7 @@ export default function BuilderPage() {
 
       <div className="grid flex-1 grid-cols-1 gap-4 overflow-hidden lg:grid-cols-[200px_1fr_280px]">
         <div className="overflow-y-auto">
-          <FieldPalette onAdd={addField} />
+          <FieldPalette onAddField={(type: string) => addField(type as FieldType)} />
         </div>
 
         <div className="overflow-y-auto">
@@ -223,16 +223,14 @@ export default function BuilderPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <FormPreview schema={schema} />
+                <FormPreview fields={schema.fields} />
               </motion.div>
             ) : (
               <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <FieldList
                   fields={schema.fields}
-                  selectedFieldId={selectedFieldId}
+                  selectedId={selectedFieldId ?? undefined}
                   onSelect={setSelectedFieldId}
-                  onDelete={deleteField}
-                  onReorder={reorderFields}
                 />
               </motion.div>
             )}
@@ -240,7 +238,10 @@ export default function BuilderPage() {
         </div>
 
         <div className="overflow-y-auto">
-          <FieldPropertiesPanel field={selectedField} onUpdate={updateField} />
+          <FieldPropertiesPanel
+            field={selectedField}
+            onUpdate={(updatedField) => updateField(updatedField.id, updatedField)}
+          />
         </div>
       </div>
     </div>

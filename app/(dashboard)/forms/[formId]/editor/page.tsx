@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import Form from "@/models/Form";
 import { EditorClient } from "./EditorClient";

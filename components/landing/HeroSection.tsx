@@ -83,14 +83,14 @@ function AnimatedFormCard() {
         <span className="text-xs text-[#71717A]">AI is generating your form...</span>
       </div>
 
-      <div className="bg-[#0A0A0F] border border-[#1E1E2E] rounded-lg p-3 mb-4 min-h-[72px]">
+      <div className="bg-[#0A0A0F] border border-[#1E1E2E] rounded-lg p-3 mb-4 min-h-18">
         <p className="text-sm text-[#A1A1AA] leading-relaxed font-mono">
           {text}
           {phase === 'typing' && (
             <motion.span
               animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 0.8, repeat: Infinity }}
-              className="inline-block w-[2px] h-4 bg-[#7C3AED] ml-0.5 align-middle"
+              className="inline-block w-0.5 h-4 bg-[#7C3AED] ml-0.5 align-middle"
             />
           )}
         </p>
@@ -168,7 +168,7 @@ export function HeroSection() {
 
           <motion.h1 variants={item} className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight">
             <span className="block text-white">Describe it.</span>
-            <span className="block bg-gradient-to-r from-[#7C3AED] to-[#2DD4BF] bg-clip-text text-transparent">
+            <span className="block bg-linear-to-r from-[#7C3AED] to-[#2DD4BF] bg-clip-text text-transparent">
               Ship it.
             </span>
           </motion.h1>

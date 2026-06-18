@@ -70,7 +70,7 @@ export function SubmissionsTable({ fields, submissions, pageSize = 10 }: Submiss
                   {formatDate(submission.submittedAt)}
                 </TableCell>
                 {fields.map((field) => (
-                  <TableCell key={field.id} className="text-white text-sm max-w-[240px] truncate">
+                  <TableCell key={field.id} className="text-white text-sm max-w-60 truncate">
                     {renderCellValue(submission.data[field.id])}
                   </TableCell>
                 ))}
