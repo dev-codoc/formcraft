@@ -12,7 +12,7 @@ export function PlanBadge({ plan, status }: PlanBadgeProps) {
   const config = getPlan(plan);
 
   if (status === "past_due") {
-    return <Badge variant="warning">{config.name} · Payment due</Badge>;
+    return <Badge variant="destructive">{config.name} · Payment due</Badge>;
   }
 
   if (status === "cancelled") {
@@ -23,5 +23,5 @@ export function PlanBadge({ plan, status }: PlanBadgeProps) {
     return <Badge variant="secondary">Free plan</Badge>;
   }
 
-  return <Badge variant="success">{config.name} plan</Badge>;
+  return <Badge variant="default">{config.name} plan</Badge>;
 }
