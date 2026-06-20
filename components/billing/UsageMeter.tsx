@@ -39,7 +39,7 @@ export function UsageMeter({ label, current, limit }: UsageMeterProps) {
         />
       )}
       {isUnlimited && (
-        <div className="h-2 w-full rounded-full bg-gradient-to-r from-zinc-900 to-zinc-400 dark:from-zinc-50 dark:to-zinc-600" />
+        <div className="h-2 w-full rounded-full bg-linear-to-r from-zinc-900 to-zinc-400 dark:from-zinc-50 dark:to-zinc-600" />
       )}
     </div>
   );
