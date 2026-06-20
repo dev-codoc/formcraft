@@ -25,6 +25,27 @@ export function verifyPaymentSignature({
 }
 
 /**
+ * Verifies the signature returned after a SUBSCRIPTION checkout (different formula
+ * from a one-time order — uses payment_id + subscription_id, not order_id).
+ */
+export function verifySubscriptionSignature({
+  paymentId,
+  subscriptionId,
+  signature,
+}: {
+  paymentId: string;
+  subscriptionId: string;
+  signature: string;
+}): boolean {
+  const expected = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+    .update(`${paymentId}|${subscriptionId}`)
+    .digest("hex");
+
+  return timingSafeEqual(expected, signature);
+}
+
+/**
  * Verifies a webhook payload's signature using your Webhook Secret
  * (set in Razorpay Dashboard → Webhooks, separate from your API key secret).
  *

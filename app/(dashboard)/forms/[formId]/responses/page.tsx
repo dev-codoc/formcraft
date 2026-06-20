@@ -1,8 +1,8 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import Form from "@/models/Form";
-import Response from "@/models/Response";
+import Submission from "@/models/Submission";
 import { ResponsesClient } from "./ResponsesClient";
 
 interface ResponsesPageProps {
@@ -17,9 +17,16 @@ export default async function ResponsesPage({ params }: ResponsesPageProps) {
   const form = await Form.findOne({ _id: params.formId, owner: session.user.id }).lean();
   if (!form) notFound();
 
-  const responses = await Response.find({ formId: params.formId })
-    .sort({ createdAt: -1 })
+  const submissions = await Submission.find({ formId: params.formId })
+    .sort({ submittedAt: -1 })
     .lean();
+
+  const responses = submissions.map((sub: any) => ({
+    _id: sub._id.toString(),
+    formId: sub.formId.toString(),
+    createdAt: sub.submittedAt.toISOString(),
+    answers: sub.data,
+  }));
 
   return (
     <ResponsesClient
