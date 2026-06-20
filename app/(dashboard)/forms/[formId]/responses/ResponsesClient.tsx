@@ -142,7 +142,7 @@ export function ResponsesClient({ formTitle, fields, responses }: ResponsesClien
                       const val = response.answers[field.id];
                       const display = Array.isArray(val) ? val.join(", ") : val ?? "—";
                       return (
-                        <td key={field.id} className="max-w-[200px] truncate px-4 py-2.5 text-zinc-900 dark:text-zinc-100">
+                        <td key={field.id} className="max-w-50 truncate px-4 py-2.5 text-zinc-900 dark:text-zinc-100">
                           {display}
                         </td>
                       );
