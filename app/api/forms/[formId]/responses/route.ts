@@ -7,7 +7,7 @@ import Submission from '@/models/Submission';
 // GET /api/forms/[formId]/responses — get all submissions + summary stats (owner only)
 export async function GET(req: NextRequest, { params }: { params: { formId: string } }) {
   const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
 

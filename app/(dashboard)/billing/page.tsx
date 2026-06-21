@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import Subscription from "@/models/Subscription";
 import UsageLog, { getCurrentPeriod } from "@/models/UsageLog";

@@ -1,11 +1,13 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
+import type { NextAuthConfig } from 'next-auth';
 import bcrypt from 'bcryptjs';
 import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const authConfig = {
+  trustHost: true,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -42,7 +44,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
   },
 
   pages: {
@@ -87,4 +89,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

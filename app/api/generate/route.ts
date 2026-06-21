@@ -4,7 +4,7 @@ import { generateFormSchema } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { prompt } = await req.json();
   if (!prompt || typeof prompt !== 'string' || prompt.length < 10) {

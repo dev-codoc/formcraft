@@ -26,7 +26,7 @@ interface FormSummary {
 
 async function getUserForms(userId: string): Promise<FormSummary[]> {
   await connectDB();
-  const forms = await Form.find({ owner: userId })
+  const forms = await Form.find({ userId: userId })
     .sort({ updatedAt: -1 })
     .lean();
   return JSON.parse(JSON.stringify(forms));

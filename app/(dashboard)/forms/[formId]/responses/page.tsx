@@ -14,7 +14,7 @@ export default async function ResponsesPage({ params }: ResponsesPageProps) {
   if (!session?.user?.id) redirect("/login");
 
   await connectDB();
-  const form = await Form.findOne({ _id: params.formId, owner: session.user.id }).lean();
+  const form = await Form.findOne({ _id: params.formId, userId: session.user.id }).lean();
   if (!form) notFound();
 
   const submissions = await Submission.find({ formId: params.formId })

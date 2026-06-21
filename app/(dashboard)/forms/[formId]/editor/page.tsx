@@ -11,7 +11,7 @@ interface EditorPageProps {
 
 async function getForm(formId: string, userId: string): Promise<FormSchema | null> {
   await connectDB();
-  const form = await Form.findOne({ _id: formId, owner: userId }).lean();
+  const form = await Form.findOne({ _id: formId, userId: userId }).lean();
   if (!form) return null;
   return JSON.parse(JSON.stringify(form));
 }
