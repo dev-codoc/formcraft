@@ -1,94 +1,114 @@
-import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
-import Credentials from 'next-auth/providers/credentials';
-import type { NextAuthConfig } from 'next-auth';
-import bcrypt from 'bcryptjs';
-import { connectDB } from '@/lib/mongodb';
-import User from '@/models/User';
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { connectDB } from "@/lib/mongodb";
+import User from "@/models/User";
 
-const authConfig = {
-  trustHost: true,
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          Google({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          }),
+        ]
+      : []),
     Credentials({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        await connectDB();
+        try {
+          await connectDB();
 
-        const user = await User.findOne({ email: credentials.email });
-        if (!user || !user.password) return null;
+          const user = await User.findOne({ email: credentials.email });
+          if (!user || !user.password) return null;
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        );
-        if (!isValid) return null;
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
+          if (!isValid) return null;
 
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          image: user.image ?? null,
-        };
+          return {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            image: user.image ?? null,
+          };
+        } catch (error) {
+          console.error("Authorize error:", error);
+          return null;
+        }
       },
     }),
   ],
 
   session: {
-    strategy: 'jwt' as const,
+    strategy: "jwt",
   },
 
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'google') {
-        await connectDB();
+      try {
+        if (account?.provider === "google") {
+          await connectDB();
 
-        const existing = await User.findOne({ email: user.email });
-        if (!existing) {
-          await User.create({
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            provider: 'google',
-          });
+          const existing = await User.findOne({ email: user.email });
+          if (!existing) {
+            await User.create({
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              provider: "google",
+            });
+          }
         }
+        return true;
+      } catch (error) {
+        console.error("SignIn callback error:", error);
+        return true;
       }
-      return true;
     },
 
     async jwt({ token, user }) {
-      if (user) {
-        await connectDB();
-        const dbUser = await User.findOne({ email: user.email });
-        if (dbUser) {
-          token.id = dbUser._id.toString();
+      try {
+        if (user) {
+          await connectDB();
+          const dbUser = await User.findOne({ email: user.email });
+          if (dbUser) {
+            token.id = dbUser._id.toString();
+          }
         }
+        return token;
+      } catch (error) {
+        console.error("JWT callback error:", error);
+        return token;
       }
-      return token;
     },
 
     async session({ session, token }) {
-      if (token?.id) {
-        session.user.id = token.id as string;
+      try {
+        if (token?.id && session.user) {
+          session.user.id = token.id as string;
+        }
+        return session;
+      } catch (error) {
+        console.error("Session callback error:", error);
+        return session;
       }
-      return session;
     },
   },
 
-  secret: process.env.NEXTAUTH_SECRET,
-};
-
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+  secret: process.env.AUTH_SECRET,
+});
