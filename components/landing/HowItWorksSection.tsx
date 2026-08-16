@@ -22,30 +22,30 @@ const STEPS = [
 
 export function HowItWorksSection() {
   return (
-    <section className="relative py-24 bg-[#0D0D14]">
+    <section id="how-it-works" className="relative border-y border-border bg-card py-24">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
-          <span className="text-xs tracking-widest text-[#7C3AED] font-semibold">HOW IT WORKS</span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">
+          <span className="field-id">how it works</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
             Three steps. Zero friction.
           </h2>
         </motion.div>
 
-        <div className="relative grid sm:grid-cols-3 gap-10 max-w-4xl mx-auto">
+        <div className="relative mx-auto grid max-w-4xl gap-10 sm:grid-cols-3">
           {/* Connecting line — desktop only */}
-          <div className="hidden sm:block absolute top-6 left-[16.66%] right-[16.66%] h-px bg-[#1E1E2E]">
+          <div className="absolute left-[16.66%] right-[16.66%] top-6 hidden h-px bg-border sm:block">
             <motion.div
               initial={{ width: '0%' }}
               whileInView={{ width: '100%' }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-              className="h-full bg-gradient-to-r from-[#7C3AED] to-[#2DD4BF]"
+              className="h-full bg-primary"
             />
           </div>
 
@@ -58,11 +58,11 @@ export function HowItWorksSection() {
               transition={{ duration: 0.5, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               className="relative flex flex-col items-center text-center"
             >
-              <div className="w-12 h-12 rounded-full bg-[#7C3AED] text-white font-bold flex items-center justify-center mb-4 relative z-10 ring-4 ring-[#0D0D14]">
+              <div className="relative z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-sm bg-primary font-display font-semibold text-primary-foreground ring-4 ring-card">
                 {step.number}
               </div>
-              <h3 className="text-white font-medium text-lg mb-2">{step.title}</h3>
-              <p className="text-sm text-[#71717A] leading-relaxed max-w-xs">{step.desc}</p>
+              <h3 className="mb-2 font-display text-lg font-medium text-foreground">{step.title}</h3>
+              <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
             </motion.div>
           ))}
         </div>

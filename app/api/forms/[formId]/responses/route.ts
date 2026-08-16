@@ -5,13 +5,14 @@ import Form from '@/models/Form';
 import Submission from '@/models/Submission';
 
 // GET /api/forms/[formId]/responses — get all submissions + summary stats (owner only)
-export async function GET(req: NextRequest, { params }: { params: { formId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
+  const { formId } = await params;
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
 
-  const form = await Form.findOne({ _id: params.formId, userId: session.user.id });
+  const form = await Form.findOne({ _id: formId, userId: session.user.id });
   if (!form) return NextResponse.json({ error: 'Form not found' }, { status: 404 });
 
   const submissions = await Submission.find({ formId: form._id }).sort({ submittedAt: -1 });

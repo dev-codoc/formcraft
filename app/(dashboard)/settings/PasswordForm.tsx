@@ -72,7 +72,7 @@ export function PasswordForm() {
           <button
             type="button"
             onClick={() => setShowCurrent((p) => !p)}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
           >
             {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -93,13 +93,13 @@ export function PasswordForm() {
           <button
             type="button"
             onClick={() => setShowNext((p) => !p)}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
           >
             {showNext ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
         </div>
         {next.length > 0 && next.length < 8 && (
-          <p className="text-[11px] text-zinc-400">
+          <p className="text-[11px] text-muted-foreground">
             {8 - next.length} more character{8 - next.length === 1 ? "" : "s"} needed
           </p>
         )}
@@ -115,17 +115,17 @@ export function PasswordForm() {
           placeholder="••••••••"
           className={
             confirm.length > 0 && confirm !== next
-              ? "border-red-400 focus-visible:ring-red-400"
+              ? "border-destructive focus-visible:ring-destructive"
               : ""
           }
         />
         {confirm.length > 0 && confirm !== next && (
-          <p className="text-[11px] text-red-500">Passwords don't match</p>
+          <p className="text-[11px] text-destructive">Passwords don&apos;t match</p>
         )}
       </div>
 
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      {success && <p className="text-xs text-emerald-500">Password updated successfully.</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+      {success && <p className="text-xs text-primary">Password updated successfully.</p>}
 
       <Button onClick={handleSave} disabled={!canSave || saving} size="sm" className="gap-1.5">
         {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}

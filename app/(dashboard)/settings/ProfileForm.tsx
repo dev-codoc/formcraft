@@ -64,15 +64,15 @@ export function ProfileForm({ initialName, initialEmail, image }: ProfileFormPro
             <AvatarImage src={image ?? ""} alt={name} />
             <AvatarFallback className="text-base">{initials}</AvatarFallback>
           </Avatar>
-          <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-zinc-900 dark:border-zinc-900 dark:bg-white">
-            <Camera className="h-3 w-3 text-white dark:text-zinc-900" />
+          <div className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-card bg-primary">
+            <Camera className="h-3 w-3 text-primary-foreground" />
           </div>
         </div>
         <div>
-          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+          <p className="text-sm font-medium text-foreground">
             {name || "Your name"}
           </p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">{email}</p>
+          <p className="text-xs text-muted-foreground">{email}</p>
         </div>
       </div>
 
@@ -98,8 +98,8 @@ export function ProfileForm({ initialName, initialEmail, image }: ProfileFormPro
         />
       </div>
 
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      {success && <p className="text-xs text-emerald-500">Changes saved successfully.</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+      {success && <p className="text-xs text-primary">Changes saved successfully.</p>}
 
       <Button onClick={handleSave} disabled={!isDirty || saving} size="sm" className="gap-1.5">
         {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}

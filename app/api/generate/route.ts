@@ -3,19 +3,39 @@ import { auth } from '@/lib/auth';
 import { generateFormSchema } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  // Best-effort session lookup. Generation is intentionally NOT gated behind a
+  // required session so the public landing demo works and so the builder keeps
+  // working even when the database is unreachable. auth() is wrapped because a
+  // misconfigured adapter/DB could otherwise throw before we ever reach the AI.
+  try {
+    await auth();
+  } catch (err) {
+    console.error('generate: session lookup failed (continuing anonymously)', err);
+  }
 
-  const { prompt } = await req.json();
-  if (!prompt || typeof prompt !== 'string' || prompt.length < 10) {
-    return NextResponse.json({ error: 'Prompt too short' }, { status: 400 });
+  let prompt: unknown;
+  try {
+    ({ prompt } = await req.json());
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+  }
+
+  if (!prompt || typeof prompt !== 'string' || prompt.trim().length < 10) {
+    return NextResponse.json(
+      { error: 'Please describe your form in at least a sentence.' },
+      { status: 400 },
+    );
   }
 
   try {
-    const schema = await generateFormSchema(prompt);
-    return NextResponse.json({ schema });
+    const schema = await generateFormSchema(prompt.trim());
+    return NextResponse.json(schema);
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: 'AI generation failed' }, { status: 500 });
+    console.error('generate: AI generation failed', err);
+    const message =
+      err instanceof Error && /OPENROUTER_API_KEY/.test(err.message)
+        ? 'AI is not configured on the server.'
+        : 'AI generation failed. Please try again in a moment.';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

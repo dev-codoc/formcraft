@@ -42,22 +42,24 @@ export function SubmissionsTable({ fields, submissions, pageSize = 10 }: Submiss
 
   if (submissions.length === 0) {
     return (
-      <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-12 text-center">
-        <p className="text-sm text-[#71717A]">No responses yet.</p>
-        <p className="text-xs text-[#52525B] mt-1">Share your form link to start collecting responses.</p>
+      <div className="rounded-md border border-border bg-card p-12 text-center">
+        <p className="text-sm text-muted-foreground">No responses yet.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Share your form link to start collecting responses.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl overflow-hidden">
+    <div className="overflow-hidden rounded-md border border-border bg-card">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-[#1E1E2E] hover:bg-transparent">
-              <TableHead className="text-[#71717A] whitespace-nowrap">Submitted</TableHead>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="whitespace-nowrap">Submitted</TableHead>
               {fields.map((field) => (
-                <TableHead key={field.id} className="text-[#71717A] whitespace-nowrap">
+                <TableHead key={field.id} className="whitespace-nowrap">
                   {field.label}
                 </TableHead>
               ))}
@@ -65,12 +67,12 @@ export function SubmissionsTable({ fields, submissions, pageSize = 10 }: Submiss
           </TableHeader>
           <TableBody>
             {pageItems.map((submission) => (
-              <TableRow key={submission._id} className="border-[#1E1E2E] hover:bg-[#1A1A27]">
-                <TableCell className="text-[#A1A1AA] whitespace-nowrap text-sm">
+              <TableRow key={submission._id}>
+                <TableCell className="whitespace-nowrap text-sm text-muted-foreground">
                   {formatDate(submission.submittedAt)}
                 </TableCell>
                 {fields.map((field) => (
-                  <TableCell key={field.id} className="text-white text-sm max-w-60 truncate">
+                  <TableCell key={field.id} className="max-w-60 truncate text-sm text-foreground">
                     {renderCellValue(submission.data[field.id])}
                   </TableCell>
                 ))}
@@ -81,8 +83,8 @@ export function SubmissionsTable({ fields, submissions, pageSize = 10 }: Submiss
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#1E1E2E]">
-          <span className="text-xs text-[#71717A]">
+        <div className="flex items-center justify-between border-t border-border px-4 py-3">
+          <span className="text-xs text-muted-foreground">
             Page {page + 1} of {totalPages} · {submissions.length} total
           </span>
           <div className="flex gap-2">
@@ -91,18 +93,16 @@ export function SubmissionsTable({ fields, submissions, pageSize = 10 }: Submiss
               size="sm"
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="border-[#1E1E2E] bg-transparent hover:bg-[#1E1E2E] text-white"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={page === totalPages - 1}
-              className="border-[#1E1E2E] bg-transparent hover:bg-[#1E1E2E] text-white"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

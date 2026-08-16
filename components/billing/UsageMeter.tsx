@@ -16,15 +16,15 @@ export function UsageMeter({ label, current, limit }: UsageMeterProps) {
   return (
     <div>
       <div className="mb-1.5 flex items-baseline justify-between">
-        <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">{label}</span>
+        <span className="text-xs font-medium text-foreground">{label}</span>
         <span
           className={cn(
             "text-xs tabular-nums",
             isOverLimit
-              ? "font-medium text-red-500"
+              ? "font-medium text-destructive"
               : isNearLimit
-              ? "font-medium text-amber-500"
-              : "text-zinc-400"
+              ? "font-medium text-clay"
+              : "text-muted-foreground"
           )}
         >
           {isUnlimited ? `${current.toLocaleString("en-IN")} used` : `${current.toLocaleString("en-IN")} / ${limit.toLocaleString("en-IN")}`}
@@ -34,12 +34,12 @@ export function UsageMeter({ label, current, limit }: UsageMeterProps) {
         <Progress
           value={percentage}
           indicatorClassName={cn(
-            isOverLimit ? "bg-red-500" : isNearLimit ? "bg-amber-500" : "bg-zinc-900 dark:bg-zinc-50"
+            isOverLimit ? "bg-destructive" : isNearLimit ? "bg-clay" : "bg-primary"
           )}
         />
       )}
       {isUnlimited && (
-        <div className="h-2 w-full rounded-full bg-linear-to-r from-zinc-900 to-zinc-400 dark:from-zinc-50 dark:to-zinc-600" />
+        <div className="h-2 w-full rounded-full bg-linear-to-r from-primary to-clay" />
       )}
     </div>
   );

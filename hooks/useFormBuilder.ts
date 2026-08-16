@@ -222,7 +222,7 @@ function createEmptyForm(id: string): FormSchema {
     title: "Untitled Form",
     description: "",
     fields: [],
-    theme: { primaryColor: "#18181b", fontFamily: "Inter" },
+    theme: { primaryColor: "#7C8B6F", fontFamily: "Inter" },
   };
 }
 

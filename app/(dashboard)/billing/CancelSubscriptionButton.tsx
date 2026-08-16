@@ -29,9 +29,9 @@ export function CancelSubscriptionButton() {
 
   if (confirming) {
     return (
-      <div className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          You'll keep access until the end of your current billing period. Continue?
+      <div className="rounded-sm border border-border bg-background/60 p-3">
+        <p className="text-xs text-muted-foreground">
+          You&apos;ll keep access until the end of your current billing period. Continue?
         </p>
         <div className="mt-2 flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setConfirming(false)}>
@@ -49,7 +49,7 @@ export function CancelSubscriptionButton() {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="text-xs text-zinc-400 underline-offset-2 hover:text-red-500 hover:underline"
+      className="text-xs text-muted-foreground underline-offset-2 transition-colors hover:text-destructive hover:underline"
     >
       Cancel subscription
     </button>

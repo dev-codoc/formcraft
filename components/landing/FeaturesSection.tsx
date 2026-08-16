@@ -45,15 +45,15 @@ export function FeaturesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-14"
+          className="mb-14 text-center"
         >
-          <span className="text-xs tracking-widest text-[#7C3AED] font-semibold">EVERYTHING YOU NEED</span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">
+          <span className="field-id">everything you need</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
             Built for speed, not configuration
           </h2>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature, i) => {
             const Icon = feature.icon;
             return (
@@ -63,14 +63,14 @@ export function FeaturesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -4, borderColor: '#7C3AED' }}
-                className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-6 transition-colors"
+                whileHover={{ y: -4 }}
+                className="group rounded-md border border-border bg-card p-6 transition-colors hover:border-clay"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#7C3AED]/10 flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-[#A78BFA]" />
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-sm bg-accent text-primary transition-colors">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-white font-medium mb-1.5">{feature.title}</h3>
-                <p className="text-sm text-[#71717A] leading-relaxed">{feature.desc}</p>
+                <h3 className="mb-1.5 font-display font-medium text-foreground">{feature.title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">{feature.desc}</p>
               </motion.div>
             );
           })}

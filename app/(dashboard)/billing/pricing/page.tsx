@@ -36,28 +36,29 @@ export default function PricingPage() {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/billing"
-        className="mb-4 flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+        className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to billing
       </Link>
 
       <div className="text-center">
-        <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <p className="field-id">pricing · plans</p>
+        <h1 className="mt-1 font-display text-xl font-semibold text-foreground">
           Choose your plan
         </h1>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           Upgrade or downgrade anytime. No hidden fees.
         </p>
 
-        <div className="mt-5 inline-flex items-center rounded-full border border-zinc-200 p-0.5 dark:border-zinc-800">
+        <div className="mt-5 inline-flex items-center rounded-full border border-border p-0.5">
           <button
             onClick={() => setBillingCycle("monthly")}
             className={cn(
               "rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
               billingCycle === "monthly"
-                ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
-                : "text-zinc-500"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             Monthly
@@ -67,12 +68,12 @@ export default function PricingPage() {
             className={cn(
               "rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors",
               billingCycle === "yearly"
-                ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
-                : "text-zinc-500"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             Yearly
-            <span className="ml-1 text-emerald-500">save ~17%</span>
+            <span className="ml-1 text-primary">save ~17%</span>
           </button>
         </div>
       </div>

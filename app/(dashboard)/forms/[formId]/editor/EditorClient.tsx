@@ -49,12 +49,15 @@ export function EditorClient({ initialSchema, formId }: EditorClientProps) {
   return (
     <div className="flex h-full flex-col">
       {/* Top bar: title + save status */}
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <Input
-          value={schema.title}
-          onChange={(e) => updateMeta({ title: e.target.value })}
-          className="h-8 max-w-xs border-none px-0 text-base font-semibold shadow-none focus-visible:ring-0"
-        />
+      <div className="mb-4 flex items-center justify-between gap-3 rounded-md border border-border bg-card px-4 py-2.5 panel-float">
+        <div className="min-w-0 flex-1">
+          <p className="field-id">editing · form_schema</p>
+          <Input
+            value={schema.title}
+            onChange={(e) => updateMeta({ title: e.target.value })}
+            className="mt-0.5 h-8 max-w-xs border-none bg-transparent px-0 text-base font-semibold text-foreground shadow-none focus-visible:ring-0"
+          />
+        </div>
 
         <div className="flex items-center gap-2">
           <SaveIndicator status={saveStatus} />
@@ -80,7 +83,7 @@ export function EditorClient({ initialSchema, formId }: EditorClientProps) {
         </div>
       </div>
 
-      <div className="grid flex-1 grid-cols-1 gap-4 overflow-hidden lg:grid-cols-[200px_1fr_280px]">
+      <div className="grid flex-1 grid-cols-1 gap-4 overflow-hidden lg:grid-cols-[220px_minmax(0,1fr)_300px]">
         <div className="overflow-y-auto">
           <FieldPalette onAdd={(type) => addField(type)} />
         </div>
@@ -117,9 +120,9 @@ function SaveIndicator({ status }: { status: "idle" | "saving" | "saved" | "erro
   if (status === "idle") return null;
 
   const config = {
-    saving: { icon: Loader2, label: "Saving...", className: "text-zinc-400 [&_svg]:animate-spin" },
-    saved: { icon: Check, label: "Saved", className: "text-emerald-500" },
-    error: { icon: AlertCircle, label: "Couldn't save", className: "text-red-500" },
+    saving: { icon: Loader2, label: "Saving...", className: "text-muted-foreground [&_svg]:animate-spin" },
+    saved: { icon: Check, label: "Saved", className: "text-primary" },
+    error: { icon: AlertCircle, label: "Couldn't save", className: "text-destructive" },
   }[status];
 
   const Icon = config.icon;

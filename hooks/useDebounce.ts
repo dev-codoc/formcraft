@@ -28,7 +28,7 @@ export function useDebounce<T>(value: T, delay: number = 500): T {
  *   const debouncedSave = useDebouncedCallback((schema) => saveToServer(schema), 800);
  *   debouncedSave(updatedSchema); // call this on every change, fires once after pause
  */
-export function useDebouncedCallback<T extends (...args: any[]) => void>(
+export function useDebouncedCallback<T extends (...args: never[]) => void>(
   callback: T,
   delay: number = 500
 ): (...args: Parameters<T>) => void {

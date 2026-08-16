@@ -26,15 +26,23 @@ async function getBillingData(userId: string) {
       const result = await razorpay.invoices.all({
         subscription_id: subscription.razorpaySubscriptionId,
       });
-      invoices = result.items.map((inv: any) => ({
-        id: inv.id,
-        amount: inv.amount / 100, // paise → rupees
-        date: new Date(inv.created_at * 1000).toLocaleDateString("en-IN", {
+      // Razorpay's SDK types invoice fields loosely (amount can be string|number|
+      // undefined), so coerce through a permissive shape rather than trusting it.
+      const items = result.items as unknown as Array<{
+        id?: string;
+        amount?: string | number;
+        created_at?: number;
+        status?: string;
+      }>;
+      invoices = items.map((inv) => ({
+        id: String(inv.id ?? ""),
+        amount: Number(inv.amount ?? 0) / 100, // paise → rupees
+        date: new Date(Number(inv.created_at ?? 0) * 1000).toLocaleDateString("en-IN", {
           day: "numeric",
           month: "short",
           year: "numeric",
         }),
-        status: inv.status,
+        status: String(inv.status ?? ""),
       }));
     } catch {
       // Razorpay API hiccup shouldn't block the whole billing page from rendering
@@ -69,7 +77,10 @@ export default async function BillingPage() {
       {isPastDue && <PastDueBanner />}
 
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Billing</h1>
+        <div>
+          <p className="field-id">plan · usage</p>
+          <h1 className="mt-1 font-display text-lg font-semibold text-foreground">Billing</h1>
+        </div>
         <Link href="/billing/pricing">
           <Button size="sm">{planKey === "free" ? "Upgrade plan" : "Change plan"}</Button>
         </Link>
@@ -84,7 +95,7 @@ export default async function BillingPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {subscription?.currentPeriodEnd && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs text-muted-foreground">
               {subscription.cancelAtPeriodEnd
                 ? `Access ends on ${new Date(subscription.currentPeriodEnd).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}`
                 : `Renews on ${new Date(subscription.currentPeriodEnd).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}`}
@@ -117,16 +128,16 @@ export default async function BillingPage() {
         </CardHeader>
         <CardContent>
           {invoices.length === 0 ? (
-            <p className="text-xs text-zinc-400">No invoices yet.</p>
+            <p className="text-xs text-muted-foreground">No invoices yet.</p>
           ) : (
-            <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <div className="divide-y divide-border">
               {invoices.map((invoice) => (
                 <div key={invoice.id} className="flex items-center justify-between py-2.5 text-sm">
-                  <span className="text-zinc-500 dark:text-zinc-400">{invoice.date}</span>
-                  <span className="text-zinc-900 dark:text-zinc-50">
+                  <span className="text-muted-foreground">{invoice.date}</span>
+                  <span className="font-medium text-foreground">
                     ₹{invoice.amount.toLocaleString("en-IN")}
                   </span>
-                  <span className="text-xs capitalize text-zinc-400">{invoice.status}</span>
+                  <span className="field-id capitalize">{invoice.status}</span>
                 </div>
               ))}
             </div>

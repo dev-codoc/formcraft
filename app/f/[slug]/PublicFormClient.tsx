@@ -28,7 +28,7 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const accent = schema.theme?.primaryColor ?? "#18181b";
+  const accent = schema.theme?.primaryColor ?? "#7C8B6F";
 
   function setAnswer(fieldId: string, value: string | string[]) {
     setAnswers((prev) => ({ ...prev, [fieldId]: value }));
@@ -65,7 +65,7 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
       });
       if (!res.ok) throw new Error("Submission failed");
       setSubmitted(true);
-    } catch (err) {
+    } catch {
       setSubmitError("Something went wrong submitting your response. Please try again.");
     } finally {
       setSubmitting(false);
@@ -74,22 +74,22 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-zinc-950">
+      <div className="drafting-dots flex min-h-screen items-center justify-center bg-background px-4">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex max-w-sm flex-col items-center text-center"
         >
           <div
-            className="flex h-12 w-12 items-center justify-center rounded-full"
+            className="flex h-12 w-12 items-center justify-center rounded-sm"
             style={{ backgroundColor: `${accent}1a` }}
           >
             <CheckCircle2 className="h-6 w-6" style={{ color: accent }} />
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          <h2 className="mt-4 font-display text-lg font-semibold text-foreground">
             Response recorded
           </h2>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             Thanks for taking the time to fill this out.
           </p>
         </motion.div>
@@ -98,19 +98,17 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 px-4 py-10 dark:bg-zinc-950">
+    <div className="drafting-dots min-h-screen bg-background px-4 py-10">
       <form
         onSubmit={handleSubmit}
-        className="mx-auto max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+        className="mx-auto max-w-md rounded-md border border-border bg-card p-6 panel-float sm:p-7"
         style={{ fontFamily: schema.theme?.fontFamily }}
       >
-        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1 className="font-display text-xl font-semibold text-foreground">
           {schema.title}
         </h1>
         {schema.description && (
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            {schema.description}
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">{schema.description}</p>
         )}
 
         <div className="mt-6 space-y-5">
@@ -132,7 +130,7 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="mt-4 text-sm text-red-500"
+              className="mt-4 text-sm text-destructive"
             >
               {submitError}
             </motion.p>
@@ -149,9 +147,7 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
           {submitting ? "Submitting..." : "Submit"}
         </Button>
 
-        <p className="mt-3 text-center text-[11px] text-zinc-400">
-          Powered by FormCraft AI
-        </p>
+        <p className="field-id mt-4 text-center">Powered by FormCraft AI</p>
       </form>
     </div>
   );
@@ -174,7 +170,7 @@ function FieldInput({
     <div className="space-y-1.5" data-error={!!error}>
       <Label className="text-sm">
         {field.label}
-        {field.required && <span className="ml-0.5 text-red-500">*</span>}
+        {field.required && <span className="ml-0.5 text-primary">*</span>}
       </Label>
 
       {field.type === "textarea" && (
@@ -183,7 +179,7 @@ function FieldInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.placeholder}
           rows={3}
-          className={cn(error && "border-red-400 focus-visible:ring-red-400")}
+          className={cn(error && "border-destructive focus-visible:ring-destructive")}
         />
       )}
 
@@ -193,13 +189,13 @@ function FieldInput({
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.placeholder}
-          className={cn(error && "border-red-400 focus-visible:ring-red-400")}
+          className={cn(error && "border-destructive focus-visible:ring-destructive")}
         />
       )}
 
       {field.type === "select" && (
         <Select value={(value as string) ?? ""} onValueChange={(v) => onChange(v)}>
-          <SelectTrigger className={cn(error && "border-red-400")}>
+          <SelectTrigger className={cn(error && "border-destructive")}>
             <SelectValue placeholder={field.placeholder ?? "Choose an option"} />
           </SelectTrigger>
           <SelectContent>
@@ -252,7 +248,7 @@ function FieldInput({
         <Input
           type="file"
           onChange={(e) => onChange(e.target.files?.[0]?.name ?? "")}
-          className={cn(error && "border-red-400")}
+          className={cn(error && "border-destructive")}
         />
       )}
 
@@ -266,11 +262,12 @@ function FieldInput({
                 type="button"
                 onClick={() => onChange(String(i))}
                 aria-label={`Rate ${i} out of 5`}
+                className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Star
                   className="h-6 w-6 transition-colors"
                   style={{
-                    color: active ? accent : "#d4d4d8",
+                    color: active ? accent : "var(--ink-muted)",
                     fill: active ? accent : "none",
                   }}
                 />
@@ -280,7 +277,7 @@ function FieldInput({
         </div>
       )}
 
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }

@@ -6,7 +6,8 @@ import { buildZodSchema } from '@/lib/zod-from-schema';
 import { ratelimit } from '@/lib/rate-limit';
 
 // POST /api/submit/[formId] — public endpoint, no auth required
-export async function POST(req: NextRequest, { params }: { params: { formId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
+  const { formId } = await params;
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '127.0.0.1';
 
   const { success } = await ratelimit.limit(ip);
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest, { params }: { params: { formId: str
 
   await connectDB();
 
-  const form = await Form.findById(params.formId);
+  const form = await Form.findById(formId);
   if (!form || !form.published) {
     return NextResponse.json({ error: 'Form not found or not published' }, { status: 404 });
   }

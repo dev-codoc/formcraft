@@ -9,7 +9,10 @@ import { getPlan, type PlanKey, type BillingCycle } from "@/lib/razorpay/plans";
 
 declare global {
   interface Window {
-    Razorpay: any;
+    Razorpay: new (options: Record<string, unknown>) => {
+      open: () => void;
+      on: (event: string, handler: (...args: unknown[]) => void) => void;
+    };
   }
 }
 
@@ -60,7 +63,7 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
         subscription_id: subscriptionId,
         name: "FormCraft AI",
         description: `${plan.name} plan — ${billingCycle}`,
-        theme: { color: "#18181b" },
+        theme: { color: "#7C8B6F" },
         handler: async (response: {
           razorpay_payment_id: string;
           razorpay_subscription_id: string;
@@ -101,14 +104,14 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/30 p-4 backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-sm rounded-xl bg-white p-5 dark:bg-zinc-900"
+        className="w-full max-w-sm rounded-md border border-border bg-card p-5 panel-float"
       >
         <div className="flex items-start justify-between">
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+          <h3 className="font-display text-sm font-semibold text-foreground">
             {step === "confirm" && `Upgrade to ${plan.name}`}
             {step === "processing" && "Opening checkout..."}
             {step === "verifying" && "Confirming payment..."}
@@ -116,7 +119,7 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
           </h3>
           <button
             onClick={onClose}
-            className="rounded p-1 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            className="rounded-sm p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             aria-label="Close"
           >
             <X className="h-4 w-4" />
@@ -125,11 +128,11 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
 
         {step === "confirm" && (
           <>
-            <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-              You'll be charged ₹{price.toLocaleString("en-IN")} {billingCycle === "yearly" ? "today, billed yearly" : "today, then monthly"}.
+            <p className="mt-2 text-sm text-muted-foreground">
+              You&apos;ll be charged ₹{price.toLocaleString("en-IN")} {billingCycle === "yearly" ? "today, billed yearly" : "today, then monthly"}.
             </p>
-            <div className="mt-4 flex items-center gap-1.5 rounded-md bg-zinc-50 px-3 py-2 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+            <div className="mt-4 flex items-center gap-1.5 rounded-sm bg-accent px-3 py-2 text-xs text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary" />
               Secured by Razorpay. Cancel anytime from your billing page.
             </div>
             <div className="mt-4 flex gap-2">
@@ -145,8 +148,8 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
 
         {(step === "processing" || step === "verifying") && (
           <div className="mt-6 flex flex-col items-center py-4">
-            <Loader2 className="h-6 w-6 animate-spin text-zinc-400" />
-            <p className="mt-2 text-xs text-zinc-400">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <p className="mt-2 text-xs text-muted-foreground">
               {step === "processing" ? "Hang tight..." : "Almost done..."}
             </p>
           </div>
@@ -154,7 +157,7 @@ export function UpgradeModal({ planKey, billingCycle, onClose }: UpgradeModalPro
 
         {step === "error" && (
           <>
-            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+            <p className="mt-2 text-sm text-destructive">{errorMessage}</p>
             <div className="mt-4 flex gap-2">
               <Button variant="outline" className="flex-1" onClick={onClose}>
                 Close

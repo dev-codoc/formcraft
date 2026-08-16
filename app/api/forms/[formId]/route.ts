@@ -4,12 +4,13 @@ import { connectDB } from '@/lib/mongodb';
 import Form from '@/models/Form';
 
 // GET /api/forms/[formId] — get a single form (owner only)
-export async function GET(req: NextRequest, { params }: { params: { formId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
+  const { formId } = await params;
   const session = await auth();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
-  const form = await Form.findOne({ _id: params.formId, userId: session.user.id });
+  const form = await Form.findOne({ _id: formId, userId: session.user.id });
 
   if (!form) return NextResponse.json({ error: 'Form not found' }, { status: 404 });
 
@@ -17,7 +18,8 @@ export async function GET(req: NextRequest, { params }: { params: { formId: stri
 }
 
 // PATCH /api/forms/[formId] — update form schema, publish status, etc.
-export async function PATCH(req: NextRequest, { params }: { params: { formId: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
+  const { formId } = await params;
   const session = await auth();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -26,7 +28,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { formId: st
 
   await connectDB();
 
-  const form = await Form.findOne({ _id: params.formId, userId: session.user.id });
+  const form = await Form.findOne({ _id: formId, userId: session.user.id });
   if (!form) return NextResponse.json({ error: 'Form not found' }, { status: 404 });
 
   if (title !== undefined) form.title = title;
@@ -41,13 +43,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { formId: st
 }
 
 // DELETE /api/forms/[formId] — delete a form
-export async function DELETE(req: NextRequest, { params }: { params: { formId: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
+  const { formId } = await params;
   const session = await auth();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
 
-  const form = await Form.findOneAndDelete({ _id: params.formId, userId: session.user.id });
+  const form = await Form.findOneAndDelete({ _id: formId, userId: session.user.id });
   if (!form) return NextResponse.json({ error: 'Form not found' }, { status: 404 });
 
   return NextResponse.json({ success: true });

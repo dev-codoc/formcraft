@@ -56,65 +56,58 @@ export function FormCard({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2, borderColor: '#7C3AED' }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.3 }}
-      className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-5 flex flex-col gap-3"
+      className="flex flex-col gap-3 rounded-md border border-border bg-card p-5 transition-colors hover:border-clay"
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-white font-medium text-base leading-snug">{title}</h3>
+        <h3 className="font-display text-base font-medium leading-snug text-foreground">{title}</h3>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="text-[#52525B] hover:text-white transition-colors shrink-0">
-              <MoreVertical className="w-4 h-4" />
+            <button className="shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <MoreVertical className="h-4 w-4" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-[#111118] border-[#1E1E2E] text-white">
-            <DropdownMenuItem asChild className="focus:bg-[#1E1E2E] focus:text-white cursor-pointer">
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem asChild className="cursor-pointer">
               <Link href={`/forms/${id}/editor`}>
-                <Pencil className="w-4 h-4 mr-2" /> Edit
+                <Pencil className="mr-2 h-4 w-4" /> Edit
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="focus:bg-[#1E1E2E] focus:text-white cursor-pointer">
+            <DropdownMenuItem asChild className="cursor-pointer">
               <Link href={`/forms/${id}/responses`}>
-                <BarChart3 className="w-4 h-4 mr-2" /> View responses
+                <BarChart3 className="mr-2 h-4 w-4" /> View responses
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleCopyLink} className="focus:bg-[#1E1E2E] focus:text-white cursor-pointer">
-              <Copy className="w-4 h-4 mr-2" /> Copy link
+            <DropdownMenuItem onClick={handleCopyLink} className="cursor-pointer">
+              <Copy className="mr-2 h-4 w-4" /> Copy link
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-[#1E1E2E]" />
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => onDelete(id)}
-              className="focus:bg-red-950 text-red-400 focus:text-red-300 cursor-pointer"
+              className="cursor-pointer text-destructive focus:text-destructive"
             >
-              <Trash2 className="w-4 h-4 mr-2" /> Delete
+              <Trash2 className="mr-2 h-4 w-4" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       <div className="flex items-center gap-2">
-        <Badge
-          variant="outline"
-          className={
-            published
-              ? 'border-[#2DD4BF]/30 text-[#2DD4BF] bg-[#2DD4BF]/10'
-              : 'border-[#1E1E2E] text-[#71717A] bg-transparent'
-          }
-        >
+        <Badge variant={published ? 'default' : 'secondary'}>
           {published ? 'Published' : 'Draft'}
         </Badge>
-        <span className="text-xs text-[#52525B]">·</span>
-        <span className="text-xs text-[#71717A]">{fieldCount} fields</span>
+        <span className="text-xs text-muted-foreground">·</span>
+        <span className="text-xs text-muted-foreground">{fieldCount} fields</span>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-[#1E1E2E]">
-        <div className="flex items-center gap-1.5 text-sm text-[#A1A1AA]">
-          <LinkIcon className="w-3.5 h-3.5" />
+      <div className="flex items-center justify-between border-t border-border pt-3">
+        <div className="flex items-center gap-1.5 text-sm text-foreground">
+          <LinkIcon className="h-3.5 w-3.5 text-muted-foreground" />
           <span>{responseCount} response{responseCount === 1 ? '' : 's'}</span>
         </div>
-        <span className="text-xs text-[#52525B]">{formatRelativeTime(createdAt)}</span>
+        <span className="text-xs text-muted-foreground">{formatRelativeTime(createdAt)}</span>
       </div>
     </motion.div>
   );

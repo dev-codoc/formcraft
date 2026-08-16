@@ -2,7 +2,7 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Trash2, Type, Mail, Phone, Hash, AlignLeft, ChevronDown, CheckSquare, Calendar, Paperclip } from 'lucide-react';
+import { GripVertical, Trash2, Type, Mail, Phone, Hash, AlignLeft, ChevronDown, CheckSquare, Calendar, Paperclip, CircleDot } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import type { FormField } from '@/models/Form';
@@ -14,6 +14,7 @@ const TYPE_ICONS: Record<FormField['type'], React.ComponentType<{ className?: st
   number: Hash,
   textarea: AlignLeft,
   select: ChevronDown,
+  radio: CircleDot,
   checkbox: CheckSquare,
   date: Calendar,
   file: Paperclip,
@@ -42,45 +43,44 @@ export function DraggableField({ field, onUpdate, onDelete }: DraggableFieldProp
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-3 bg-[#111118] border border-[#1E1E2E] rounded-xl p-3"
+      className="flex items-center gap-3 rounded-md border border-border bg-card p-3 transition-colors hover:border-clay/60"
     >
       <button
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing text-[#52525B] hover:text-[#A1A1AA] transition-colors touch-none"
+        className="cursor-grab touch-none text-muted-foreground transition-colors hover:text-foreground active:cursor-grabbing focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
         aria-label="Drag to reorder"
       >
-        <GripVertical className="w-4 h-4" />
+        <GripVertical className="h-4 w-4" />
       </button>
 
-      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#7C3AED]/10 text-[#A78BFA] flex-shrink-0">
-        <Icon className="w-4 h-4" />
+      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-sm bg-accent text-primary">
+        <Icon className="h-4 w-4" />
       </div>
 
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <Input
           value={field.label}
           onChange={(e) => onUpdate(field.id, { label: e.target.value })}
-          className="bg-transparent border-0 text-white text-sm font-medium px-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="h-auto border-0 bg-transparent px-0 text-sm font-medium text-foreground shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
         />
-        <span className="text-xs text-[#52525B] capitalize">{field.type}</span>
+        <span className="field-id">{field.type}</span>
       </div>
 
-      <div className="flex items-center gap-2 flex-shrink-0">
-        <span className="text-xs text-[#71717A]">Required</span>
+      <div className="flex flex-shrink-0 items-center gap-2">
+        <span className="text-xs text-muted-foreground">Required</span>
         <Switch
           checked={field.required}
           onCheckedChange={(checked) => onUpdate(field.id, { required: checked })}
-          className="data-[state=checked]:bg-[#7C3AED]"
         />
       </div>
 
       <button
         onClick={() => onDelete(field.id)}
-        className="text-[#52525B] hover:text-red-400 transition-colors flex-shrink-0"
+        className="flex-shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="Delete field"
       >
-        <Trash2 className="w-4 h-4" />
+        <Trash2 className="h-4 w-4" />
       </button>
     </div>
   );

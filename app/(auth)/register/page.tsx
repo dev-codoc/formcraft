@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Loader2, PencilRuler } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function RegisterPage() {
@@ -57,40 +57,48 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#0A0A0F] px-6 relative overflow-hidden">
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#7C3AED] rounded-full opacity-[0.12] blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#2DD4BF] rounded-full opacity-[0.12] blur-3xl pointer-events-none" />
-
+    <main className="drafting-dots relative flex min-h-screen items-center justify-center px-6 py-12">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-sm relative z-10"
+        className="w-full max-w-sm"
       >
-        <Link href="/" className="flex items-center justify-center gap-2 text-white font-medium mb-8">
-          <span className="text-[#7C3AED]">{'<>'}</span>
-          FormCraft AI
+        <Link
+          href="/"
+          className="mb-8 flex items-center justify-center gap-2.5 font-display text-lg font-semibold text-foreground"
+        >
+          <span className="grid h-8 w-8 place-items-center rounded-sm bg-primary text-primary-foreground">
+            <PencilRuler className="h-4 w-4" />
+          </span>
+          FormCraft
         </Link>
 
-        <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-6">
-          <h1 className="text-xl font-medium text-white mb-1">Create your account</h1>
-          <p className="text-sm text-[#71717A] mb-6">Start building AI-powered forms</p>
+        <div className="rounded-md border border-border bg-card p-7 panel-float">
+          <div className="mb-6">
+            <p className="field-id mb-2">get started</p>
+            <h1 className="font-display text-2xl font-semibold text-foreground">
+              Create your account
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Start building better forms in minutes.
+            </p>
+          </div>
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-sm text-[#A1A1AA]">Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jane Smith"
-                className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm text-[#A1A1AA]">Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -98,12 +106,11 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-sm text-[#A1A1AA]">Password</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -112,23 +119,18 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="At least 8 characters"
-                className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]"
               />
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white"
-            >
-              {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create account
             </Button>
           </form>
 
-          <p className="text-sm text-[#71717A] text-center mt-5">
+          <p className="mt-5 text-center text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#A78BFA] hover:text-white transition-colors">
+            <Link href="/login" className="font-medium text-primary hover:underline">
               Sign in
             </Link>
           </p>

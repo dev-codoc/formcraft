@@ -4,10 +4,22 @@ import { connectDB } from "@/lib/mongodb";
 import Form from "@/models/Form";
 import Submission from "@/models/Submission";
 import { ResponsesClient } from "./ResponsesClient";
+import type { FormField } from "@/hooks/useFormBuilder";
 
 interface ResponsesPageProps {
   params: { formId: string };
 }
+
+// Mongoose `.lean()` returns loosely-typed plain objects; describe the shape we
+// actually read so we don't reach for `any`.
+type LeanSubmission = {
+  _id: { toString(): string };
+  formId: { toString(): string };
+  submittedAt: Date;
+  data: Record<string, string | string[]>;
+};
+
+type LeanForm = { title: string; fields: FormField[] };
 
 export default async function ResponsesPage({ params }: ResponsesPageProps) {
   const session = await auth();
@@ -21,17 +33,19 @@ export default async function ResponsesPage({ params }: ResponsesPageProps) {
     .sort({ submittedAt: -1 })
     .lean();
 
-  const responses = submissions.map((sub: any) => ({
+  const responses = (submissions as unknown as LeanSubmission[]).map((sub) => ({
     _id: sub._id.toString(),
     formId: sub.formId.toString(),
     createdAt: sub.submittedAt.toISOString(),
     answers: sub.data,
   }));
 
+  const typedForm = form as unknown as LeanForm;
+
   return (
     <ResponsesClient
-      formTitle={(form as any).title}
-      fields={(form as any).fields}
+      formTitle={typedForm.title}
+      fields={typedForm.fields}
       responses={JSON.parse(JSON.stringify(responses))}
     />
   );

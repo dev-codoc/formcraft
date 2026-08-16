@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Loader2, PencilRuler } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
@@ -17,6 +17,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('error')) {
+      toast.error('Google sign-in could not be completed. Check the callback URL configuration and try again.');
+    }
+  }, []);
 
   const handleCredentialsLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,39 +46,53 @@ export default function LoginPage() {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
-    await signIn('google', { callbackUrl: '/dashboard' });
+    try {
+      await signIn('google', { redirectTo: '/dashboard' });
+    } catch {
+      setGoogleLoading(false);
+      toast.error('Unable to start Google sign-in. Please try again.');
+    }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[#0A0A0F] px-6 relative overflow-hidden">
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[#7C3AED] rounded-full opacity-[0.12] blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#2DD4BF] rounded-full opacity-[0.12] blur-3xl pointer-events-none" />
-
+    <main className="drafting-dots relative flex min-h-screen items-center justify-center px-6 py-12">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-sm relative z-10"
+        className="w-full max-w-sm"
       >
-        <Link href="/" className="flex items-center justify-center gap-2 text-white font-medium mb-8">
-          <span className="text-[#7C3AED]">{'<>'}</span>
-          FormCraft AI
+        <Link
+          href="/"
+          className="mb-8 flex items-center justify-center gap-2.5 font-display text-lg font-semibold text-foreground"
+        >
+          <span className="grid h-8 w-8 place-items-center rounded-sm bg-primary text-primary-foreground">
+            <PencilRuler className="h-4 w-4" />
+          </span>
+          FormCraft
         </Link>
 
-        <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-6">
-          <h1 className="text-xl font-medium text-white mb-1">Welcome back</h1>
-          <p className="text-sm text-[#71717A] mb-6">Sign in to manage your forms</p>
+        <div className="rounded-md border border-border bg-card p-7 panel-float">
+          <div className="mb-6">
+            <p className="field-id mb-2">welcome back</p>
+            <h1 className="font-display text-2xl font-semibold text-foreground">
+              Sign in
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Sign in to manage and build your forms.
+            </p>
+          </div>
 
           <Button
             onClick={handleGoogleLogin}
             disabled={googleLoading}
             variant="outline"
-            className="w-full bg-transparent border-[#1E1E2E] text-white hover:bg-[#1E1E2E] mb-4"
+            className="mb-4 w-full"
           >
             {googleLoading ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
+              <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -82,15 +102,15 @@ export default function LoginPage() {
             Continue with Google
           </Button>
 
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 h-px bg-[#1E1E2E]" />
-            <span className="text-xs text-[#52525B]">or</span>
-            <div className="flex-1 h-px bg-[#1E1E2E]" />
+          <div className="mb-4 flex items-center gap-3">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">or</span>
+            <div className="h-px flex-1 bg-border" />
           </div>
 
           <form onSubmit={handleCredentialsLogin} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm text-[#A1A1AA]">Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -98,12 +118,11 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-sm text-[#A1A1AA]">Password</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -111,23 +130,18 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]"
               />
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white"
-            >
-              {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign in
             </Button>
           </form>
 
-          <p className="text-sm text-[#71717A] text-center mt-5">
+          <p className="mt-5 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-[#A78BFA] hover:text-white transition-colors">
+            <Link href="/register" className="font-medium text-primary hover:underline">
               Sign up
             </Link>
           </p>

@@ -42,22 +42,30 @@ export default async function DashboardPage() {
   const published = forms.filter((f) => f.status === "published").length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Metrics summary */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <MetricCard label="Total forms" value={forms.length} icon={FileText} />
-        <MetricCard label="Published" value={published} icon={Eye} />
-        <MetricCard label="Total responses" value={totalResponses} icon={BarChart3} />
+        <MetricCard label="Total forms" value={forms.length} icon={FileText} id="metric_forms" />
+        <MetricCard label="Published" value={published} icon={Eye} id="metric_live" />
+        <MetricCard
+          label="Total responses"
+          value={totalResponses}
+          icon={BarChart3}
+          id="metric_responses"
+        />
       </div>
 
       {/* Forms list */}
       <div>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-            Your forms
-          </h2>
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <p className="field-id">your forms</p>
+            <h2 className="mt-1 font-display text-lg font-semibold text-foreground">
+              Drafting table
+            </h2>
+          </div>
           <Link href="/builder">
-            <Button size="sm" variant="outline" className="gap-1.5">
+            <Button size="sm" className="gap-1.5">
               <Plus className="h-3.5 w-3.5" />
               New form
             </Button>
@@ -82,22 +90,25 @@ function MetricCard({
   label,
   value,
   icon: Icon,
+  id,
 }: {
   label: string;
   value: number;
   icon: React.ElementType;
+  id: string;
 }) {
   return (
     <Card>
-      <CardContent className="flex items-center justify-between p-4">
+      <CardContent className="flex items-center justify-between p-5">
         <div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">{label}</p>
-          <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+          <p className="field-id">{id}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{label}</p>
+          <p className="mt-1 font-display text-3xl font-semibold text-foreground">
             {value}
           </p>
         </div>
-        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-800">
-          <Icon className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-accent text-primary">
+          <Icon className="h-4 w-4" />
         </div>
       </CardContent>
     </Card>
@@ -106,19 +117,16 @@ function MetricCard({
 
 function FormCard({ form }: { form: FormSummary }) {
   return (
-    <Card className="group transition-shadow hover:shadow-md">
+    <Card className="group transition-colors hover:border-clay">
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
-          <Link
-            href={`/forms/${form._id}/editor`}
-            className="min-w-0 flex-1"
-          >
-            <h3 className="truncate text-sm font-medium text-zinc-900 group-hover:underline dark:text-zinc-50">
+          <Link href={`/forms/${form._id}/editor`} className="min-w-0 flex-1">
+            <h3 className="truncate text-sm font-medium text-foreground group-hover:underline">
               {form.title || "Untitled form"}
             </h3>
           </Link>
           <button
-            className="rounded p-1 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            className="rounded-sm p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
             aria-label="More options"
           >
             <MoreVertical className="h-4 w-4" />
@@ -129,12 +137,12 @@ function FormCard({ form }: { form: FormSummary }) {
           <Badge variant={form.status === "published" ? "default" : "secondary"}>
             {form.status === "published" ? "Published" : "Draft"}
           </Badge>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-xs text-muted-foreground">
             {form.responseCount} response{form.responseCount === 1 ? "" : "s"}
           </span>
         </div>
 
-        <div className="mt-3 flex gap-2">
+        <div className="mt-4 flex gap-2">
           <Link href={`/forms/${form._id}/editor`} className="flex-1">
             <Button variant="outline" size="sm" className="w-full">
               Edit
@@ -155,13 +163,13 @@ function EmptyState() {
   return (
     <Card className="border-dashed">
       <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
-          <Sparkles className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-accent text-primary">
+          <Sparkles className="h-5 w-5" />
         </div>
-        <h3 className="mt-3 text-sm font-medium text-zinc-900 dark:text-zinc-50">
+        <h3 className="mt-3 font-display text-sm font-medium text-foreground">
           No forms yet
         </h3>
-        <p className="mt-1 max-w-xs text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 max-w-xs text-xs text-muted-foreground">
           Describe what you need in plain English and let AI build the first
           draft for you.
         </p>

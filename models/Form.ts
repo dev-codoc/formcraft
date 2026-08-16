@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface FormField {
   id: string;           // unique id
   label: string;        // display label
-  type: 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'select' | 'checkbox' | 'date' | 'file';
+  type: 'text' | 'email' | 'tel' | 'number' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date' | 'file';
   required: boolean;
   placeholder?: string;
   options?: string[];   // only for select / checkbox

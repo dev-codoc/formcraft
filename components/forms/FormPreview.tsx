@@ -26,7 +26,7 @@ export function FormPreview({
   fields,
   formId,
   staticPreview = false,
-  accentColor = '#7C3AED',
+  accentColor = '#7C8B6F',
 }: FormPreviewProps) {
   const [values, setValues] = useState<Record<string, string | boolean | string[]>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -91,10 +91,12 @@ export function FormPreview({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <CheckCircle2 className="w-16 h-16 text-[#2DD4BF]" />
+          <CheckCircle2 className="h-16 w-16 text-primary" />
         </motion.div>
-        <h3 className="mt-4 text-xl font-medium text-white">Thanks for your response!</h3>
-        <p className="mt-1 text-sm text-[#71717A]">Your submission has been recorded.</p>
+        <h3 className="mt-4 font-display text-xl font-medium text-foreground">
+          Thanks for your response!
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">Your submission has been recorded.</p>
       </motion.div>
     );
   }
@@ -102,8 +104,10 @@ export function FormPreview({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-medium text-white">{title || 'Untitled form'}</h2>
-        {description && <p className="mt-1 text-sm text-[#71717A]">{description}</p>}
+        <h2 className="font-display text-lg font-medium text-foreground">
+          {title || 'Untitled form'}
+        </h2>
+        {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
       </div>
 
       <AnimatePresence>
@@ -127,7 +131,9 @@ export function FormPreview({
       </AnimatePresence>
 
       {fields.length === 0 && (
-        <p className="text-sm text-[#52525B] italic">No fields yet — generate or add some to see a preview.</p>
+        <p className="text-sm italic text-muted-foreground">
+          No fields yet — generate or add some to see a preview.
+        </p>
       )}
 
       {fields.length > 0 && (
@@ -140,7 +146,7 @@ export function FormPreview({
           >
             {state === 'submitting' ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Submitting...
               </>
             ) : (
@@ -151,7 +157,7 @@ export function FormPreview({
       )}
 
       {state === 'error' && errorMessage && (
-        <p className="text-sm text-red-400 text-center">{errorMessage}</p>
+        <p className="text-center text-sm text-destructive">{errorMessage}</p>
       )}
     </div>
   );

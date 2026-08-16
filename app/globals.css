@@ -4,12 +4,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ──────────────────────────────────────────────────────────────
+   FormCraft AI — "Drafting Table" design system
+   Architect's graph paper: warm paper base, sage accent, clay lines.
+   Palette is intentionally quiet so the grid canvas stays the anchor.
+   ────────────────────────────────────────────────────────────── */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+
+  /* Raw drafting-table palette, exposed as Tailwind colors too */
+  --color-paper: var(--paper);
+  --color-grid: var(--grid-line);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+  --color-clay: var(--clay);
+
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -39,82 +57,104 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Barely-rounded corners — precision tooling, not a soft AI startup */
   --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-md: calc(var(--radius) * 0.85);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-2xl: calc(var(--radius) * 1.9);
+  --radius-3xl: calc(var(--radius) * 2.4);
+  --radius-4xl: calc(var(--radius) * 3);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Raw drafting palette */
+  --paper: #faf8f4; /* warm off-white base */
+  --grid-line: #ede8df; /* graph-paper lines / hairline borders */
+  --surface: #ffffff; /* pure white field blocks & panels */
+  --ink: #2b2a28; /* warm charcoal — primary text */
+  --ink-muted: #8a8577; /* muted ink — secondary text / labels */
+  --sage: #7c8b6f; /* dusty sage — primary accent */
+  --sage-soft: #eef1ea; /* faint sage wash for tints */
+  --clay: #c9a87c; /* clay line — hover / selection outline */
+
+  --radius: 0.25rem; /* 4px — sharp-to-barely-rounded */
+
+  /* shadcn semantic tokens mapped onto the palette */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--sage);
+  --primary-foreground: #fbfcfa;
+  --secondary: #f2ede4; /* slightly deeper than paper */
+  --secondary-foreground: var(--ink);
+  --muted: #f2ede4;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--sage-soft);
+  --accent-foreground: #45503b; /* deep sage for text on tint */
+  --destructive: #b0553f; /* muted brick — errors, not a loud red */
+  --border: var(--grid-line);
+  --input: var(--grid-line);
+  --ring: var(--sage);
+
+  --chart-1: #7c8b6f; /* sage */
+  --chart-2: #c9a87c; /* clay */
+  --chart-3: #9aa88c; /* light sage */
+  --chart-4: #b8946a; /* deep clay */
+  --chart-5: #6d7a61; /* deep sage */
+
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--sage);
+  --sidebar-primary-foreground: #fbfcfa;
+  --sidebar-accent: var(--sage-soft);
+  --sidebar-accent-foreground: #45503b;
+  --sidebar-border: var(--grid-line);
+  --sidebar-ring: var(--sage);
 }
 
+/* Optional dark drafting surface (blueprint) — used only if `.dark` is set.
+   The product ships light; this keeps token consumers from breaking. */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --paper: #22211e;
+  --grid-line: #34322d;
+  --surface: #2a2825;
+  --ink: #f3f0e9;
+  --ink-muted: #a8a294;
+  --sage: #9bab8b;
+  --sage-soft: #2f342a;
+  --clay: #cbab80;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--sage);
+  --primary-foreground: #1c1b18;
+  --secondary: #302e2a;
+  --secondary-foreground: var(--ink);
+  --muted: #302e2a;
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--sage-soft);
+  --accent-foreground: #cdd6c1;
+  --destructive: #cf6a4f;
+  --border: var(--grid-line);
+  --input: #3a3832;
+  --ring: var(--sage);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--sage);
+  --sidebar-primary-foreground: #1c1b18;
+  --sidebar-accent: var(--sage-soft);
+  --sidebar-accent-foreground: #cdd6c1;
+  --sidebar-border: var(--grid-line);
+  --sidebar-ring: var(--sage);
 }
 
 @layer base {
@@ -122,9 +162,77 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   html {
     @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  /* Visible keyboard focus everywhere, including non-token elements */
+  :focus-visible {
+    outline: 2px solid var(--sage);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--sage) 30%, transparent);
+    color: var(--ink);
+  }
+}
+
+/* ── Signature element: the graph-paper canvas ─────────────────── */
+.drafting-grid {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+/* Finer dot-grid variant (8px feel) for tighter surfaces */
+.drafting-dots {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--grid-line) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Technical field-ID label — monospace, small caps, muted ink */
+.field-id {
+  font-family: var(--font-mono), ui-monospace, "JetBrains Mono", monospace;
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-feature-settings: "tnum" 1;
+}
+
+/* Subtle elevation for floating panels — the only shadow we allow */
+.panel-float {
+  box-shadow:
+    0 1px 2px rgba(43, 42, 40, 0.04),
+    0 8px 24px -12px rgba(43, 42, 40, 0.12);
+}
+
+/* Respect reduced-motion for CSS-driven animation/transition.
+   framer-motion is handled globally via <MotionConfig reducedMotion="user">. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

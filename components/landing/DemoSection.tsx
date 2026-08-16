@@ -52,7 +52,13 @@ export function DemoSection() {
 
       if (res.ok) {
         const data = await res.json();
-        setSchema(data.schema);
+        // API returns the schema fields at the top level; support both shapes.
+        const next = data.schema ?? data;
+        if (next && Array.isArray(next.fields) && next.fields.length > 0) {
+          setSchema(next);
+        } else {
+          setSchema(MOCK_SCHEMA);
+        }
       } else {
         // Not logged in or error — fall back to mock for demo purposes
         await new Promise((r) => setTimeout(r, 1200));
@@ -67,19 +73,19 @@ export function DemoSection() {
   };
 
   return (
-    <section id="demo" className="relative py-24 overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#7C3AED] rounded-full opacity-[0.08] blur-[120px] pointer-events-none" />
-
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="demo" className="drafting-dots relative overflow-hidden py-24">
+      <div className="container relative z-10 mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <span className="text-xs tracking-widest text-[#7C3AED] font-semibold">TRY IT NOW</span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">Build a form. Right here.</h2>
+          <span className="field-id">try it now</span>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
+            Build a form. Right here.
+          </h2>
         </motion.div>
 
         <motion.div
@@ -87,44 +93,44 @@ export function DemoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="grid lg:grid-cols-2 gap-6 max-w-4xl mx-auto"
+          className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-2"
         >
           {/* Input panel */}
-          <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-6 flex flex-col">
-            <label className="text-sm text-[#A1A1AA] mb-2">Describe your form</label>
+          <div className="flex flex-col rounded-md border border-border bg-card p-6 panel-float">
+            <label className="mb-2 text-sm font-medium text-foreground">Describe your form</label>
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="e.g. A hotel feedback form with star rating, room number, check-in date, and comments..."
               rows={4}
-              className="bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] resize-none focus-visible:ring-[#7C3AED] mb-4"
+              className="mb-4 resize-none"
             />
 
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }}>
               <Button
                 onClick={handleGenerate}
                 disabled={loading || !prompt.trim()}
-                className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white"
+                className="w-full"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 mr-2" /> Generate form
+                    <Sparkles className="mr-2 h-4 w-4" /> Generate form
                   </>
                 )}
               </Button>
             </motion.div>
 
-            <p className="text-xs text-[#52525B] mt-3 text-center">
+            <p className="mt-3 text-center text-xs text-muted-foreground">
               Powered by OpenRouter · Free to try
             </p>
           </div>
 
           {/* Preview panel */}
-          <div className="bg-[#111118] border border-[#1E1E2E] rounded-2xl p-6 min-h-[280px] flex flex-col">
+          <div className="flex min-h-[280px] flex-col rounded-md border border-border bg-card p-6 panel-float">
             <AnimatePresence mode="wait">
               {!schema && !loading && (
                 <motion.div
@@ -132,12 +138,12 @@ export function DemoSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex-1 flex flex-col items-center justify-center text-center border border-dashed border-[#1E1E2E] rounded-xl p-8"
+                  className="flex flex-1 flex-col items-center justify-center rounded-sm border border-dashed border-border p-8 text-center"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#7C3AED]/10 flex items-center justify-center mb-3">
-                    <Zap className="w-5 h-5 text-[#A78BFA]" />
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-sm bg-accent text-primary">
+                    <Zap className="h-5 w-5" />
                   </div>
-                  <p className="text-sm text-[#71717A]">Your form preview will appear here</p>
+                  <p className="text-sm text-muted-foreground">Your form preview will appear here</p>
                 </motion.div>
               )}
 
@@ -147,10 +153,10 @@ export function DemoSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex-1 flex flex-col items-center justify-center"
+                  className="flex flex-1 flex-col items-center justify-center"
                 >
-                  <Loader2 className="w-6 h-6 text-[#7C3AED] animate-spin mb-2" />
-                  <p className="text-sm text-[#71717A]">Generating your form...</p>
+                  <Loader2 className="mb-2 h-6 w-6 animate-spin text-primary" />
+                  <p className="text-sm text-muted-foreground">Generating your form...</p>
                 </motion.div>
               )}
 
@@ -160,7 +166,7 @@ export function DemoSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="flex-1 flex flex-col"
+                  className="flex flex-1 flex-col"
                 >
                   <div className="flex-1">
                     <FormPreview
@@ -171,8 +177,8 @@ export function DemoSection() {
                     />
                   </div>
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} className="mt-4">
-                    <Button className="w-full bg-[#2DD4BF] hover:bg-[#26B8A5] text-[#0A0A0F]">
-                      Publish form <ExternalLink className="w-4 h-4 ml-2" />
+                    <Button className="w-full">
+                      Publish form <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </motion.div>
                 </motion.div>

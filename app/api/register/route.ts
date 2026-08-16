@@ -58,6 +58,23 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error('Registration error:', error);
+
+    // Surface an unreachable database distinctly instead of a vague 500 — the
+    // usual cause is a missing/expired MONGODB_URI, which otherwise masquerades
+    // as a generic failure and looks like a bug in the form.
+    const message = error instanceof Error ? `${error.name}: ${error.message}` : '';
+    const isConnectionIssue =
+      /MongooseServerSelectionError|ENOTFOUND|querySrv|getaddrinfo|ETIMEDOUT|ECONNREFUSED|MONGODB_URI/i.test(
+        message,
+      );
+
+    if (isConnectionIssue) {
+      return NextResponse.json(
+        { error: "Can't reach the database. Please try again shortly." },
+        { status: 503 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Something went wrong during registration' },
       { status: 500 }

@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { ProfileForm } from "./ProfileForm";
 import { PasswordForm } from "./PasswordForm";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -11,59 +10,58 @@ export default async function SettingsPage() {
   return (
     <div className="mx-auto max-w-xl space-y-5">
       <div>
-        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Settings</h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="field-id">account · preferences</p>
+        <h1 className="mt-1 font-display text-lg font-semibold text-foreground">Settings</h1>
+        <p className="text-sm text-muted-foreground">
           Manage your profile and account preferences.
         </p>
       </div>
 
       {/* Profile */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Profile</CardTitle>
-          <CardDescription className="text-xs">
+      <section className="rounded-md border border-border bg-card panel-float">
+        <div className="border-b border-border px-5 py-3">
+          <p className="field-id">profile</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Update your display name and email address.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="p-5">
           <ProfileForm
             initialName={session.user.name ?? ""}
             initialEmail={session.user.email ?? ""}
             image={session.user.image ?? null}
           />
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
       {/* Password */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Password</CardTitle>
-          <CardDescription className="text-xs">
+      <section className="rounded-md border border-border bg-card panel-float">
+        <div className="border-b border-border px-5 py-3">
+          <p className="field-id">password</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Leave blank if you signed in with Google.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="p-5">
           <PasswordForm />
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
       {/* Danger zone */}
-      <Card className="border-red-200 dark:border-red-900/40">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-red-600 dark:text-red-400">
-            Danger zone
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+      <section className="rounded-md border border-destructive/30 bg-card panel-float">
+        <div className="border-b border-destructive/20 px-5 py-3">
+          <p className="field-id text-destructive/80">danger zone</p>
+        </div>
+        <div className="p-5">
+          <p className="text-xs text-muted-foreground">
             Once you delete your account, all your forms and responses will be permanently removed.
             This action cannot be undone.
           </p>
-          <button className="mt-3 text-xs font-medium text-red-500 underline-offset-2 hover:underline">
+          <button className="mt-3 text-xs font-medium text-destructive underline-offset-2 hover:underline">
             Delete my account
           </button>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </div>
   );
 }

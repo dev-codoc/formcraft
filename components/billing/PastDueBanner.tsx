@@ -24,8 +24,8 @@ export function PastDueBanner({ onUpdatePaymentMethod }: PastDueBannerProps) {
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-amber-200 bg-amber-50 px-4 py-2.5 dark:border-amber-900/40 dark:bg-amber-900/20">
-      <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
+    <div className="flex items-center justify-between gap-3 border-b border-destructive/30 bg-destructive/10 px-4 py-2.5">
+      <div className="flex items-center gap-2 text-destructive">
         <AlertTriangle className="h-4 w-4 shrink-0" />
         <p className="text-sm">
           Your last payment failed. Update your payment method to avoid losing access to paid features.
@@ -35,7 +35,7 @@ export function PastDueBanner({ onUpdatePaymentMethod }: PastDueBannerProps) {
         <Button
           size="sm"
           variant="outline"
-          className="h-7 border-amber-300 bg-white text-xs text-amber-800 hover:bg-amber-100 dark:border-amber-800 dark:bg-transparent dark:text-amber-300"
+          className="h-7 border-destructive/40 bg-card text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
           onClick={handleUpdate}
           disabled={loading}
         >
@@ -44,7 +44,7 @@ export function PastDueBanner({ onUpdatePaymentMethod }: PastDueBannerProps) {
         </Button>
         <button
           onClick={() => setDismissed(true)}
-          className="rounded p-1 text-amber-600 hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/30"
+          className="rounded-sm p-1 text-destructive/70 transition-colors hover:bg-destructive/10 hover:text-destructive"
           aria-label="Dismiss"
         >
           <X className="h-3.5 w-3.5" />

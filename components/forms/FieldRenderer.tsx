@@ -22,14 +22,11 @@ interface FieldRendererProps {
 }
 
 export function FieldRenderer({ field, value, onChange, error, disabled }: FieldRendererProps) {
-  const baseInputClasses =
-    'bg-[#0A0A0F] border-[#1E1E2E] text-white placeholder:text-[#52525B] focus-visible:ring-[#7C3AED]';
-
   return (
     <div className="space-y-2">
-      <Label htmlFor={field.id} className="text-sm text-[#A1A1AA]">
+      <Label htmlFor={field.id} className="text-sm text-foreground">
         {field.label}
-        {field.required && <span className="text-[#2DD4BF] ml-1">*</span>}
+        {field.required && <span className="ml-1 text-primary">*</span>}
       </Label>
 
       {field.type === 'text' && (
@@ -40,7 +37,6 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           value={(value as string) ?? ''}
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
-          className={baseInputClasses}
         />
       )}
 
@@ -52,7 +48,6 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           value={(value as string) ?? ''}
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
-          className={baseInputClasses}
         />
       )}
 
@@ -64,7 +59,6 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           value={(value as string) ?? ''}
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
-          className={baseInputClasses}
         />
       )}
 
@@ -76,7 +70,6 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           value={(value as string) ?? ''}
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
-          className={baseInputClasses}
         />
       )}
 
@@ -87,7 +80,6 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           value={(value as string) ?? ''}
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
-          className={baseInputClasses}
         />
       )}
 
@@ -99,7 +91,7 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           onChange={(e) => onChange(field.id, e.target.value)}
           disabled={disabled}
           rows={4}
-          className={`${baseInputClasses} resize-none`}
+          className="resize-none"
         />
       )}
 
@@ -109,12 +101,12 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           onValueChange={(val) => onChange(field.id, val)}
           disabled={disabled}
         >
-          <SelectTrigger className={baseInputClasses}>
+          <SelectTrigger>
             <SelectValue placeholder={field.placeholder ?? 'Select an option'} />
           </SelectTrigger>
-          <SelectContent className="bg-[#111118] border-[#1E1E2E] text-white">
+          <SelectContent>
             {field.options?.map((opt) => (
-              <SelectItem key={opt} value={opt} className="focus:bg-[#1E1E2E] focus:text-white">
+              <SelectItem key={opt} value={opt}>
                 {opt}
               </SelectItem>
             ))}
@@ -139,14 +131,32 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
                       : current.filter((v) => v !== opt);
                     onChange(field.id, next);
                   }}
-                  className="border-[#1E1E2E] data-[state=checked]:bg-[#7C3AED] data-[state=checked]:border-[#7C3AED]"
                 />
-                <Label htmlFor={`${field.id}-${opt}`} className="text-sm text-[#D4D4D8] font-normal">
+                <Label htmlFor={`${field.id}-${opt}`} className="text-sm font-normal text-foreground">
                   {opt}
                 </Label>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {field.type === 'radio' && (
+        <div className="space-y-2">
+          {field.options?.map((opt) => (
+            <label key={opt} className="flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="radio"
+                name={field.id}
+                value={opt}
+                checked={value === opt}
+                disabled={disabled}
+                onChange={() => onChange(field.id, opt)}
+                className="h-4 w-4 accent-[var(--sage)]"
+              />
+              {opt}
+            </label>
+          ))}
         </div>
       )}
 
@@ -156,11 +166,11 @@ export function FieldRenderer({ field, value, onChange, error, disabled }: Field
           type="file"
           disabled={disabled}
           onChange={(e) => onChange(field.id, e.target.files?.[0]?.name ?? '')}
-          className={`${baseInputClasses} file:text-[#A1A1AA] file:bg-[#1E1E2E] file:border-0 file:rounded-md file:px-3 file:py-1 file:mr-3`}
+          className="file:mr-3 file:rounded-sm file:border-0 file:bg-muted file:px-3 file:py-1 file:text-muted-foreground"
         />
       )}
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }
