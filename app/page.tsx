@@ -74,7 +74,9 @@ function Footer() {
           <span className="field-id">formcraft_ai</span>
           <span>· © {new Date().getFullYear()}</span>
         </div>
-        <p className="text-xs text-muted-foreground">Built with Next.js &amp; OpenRouter</p>
+        <p className="text-xs text-muted-foreground">
+          Crafted with 🩵 by Devanshu Singh · Powered by Next.js &amp; OpenRouter
+        </p>
       </div>
     </footer>
   );
