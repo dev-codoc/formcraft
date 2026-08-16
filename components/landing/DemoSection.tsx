@@ -130,7 +130,7 @@ export function DemoSection() {
           </div>
 
           {/* Preview panel */}
-          <div className="flex min-h-[280px] flex-col rounded-md border border-border bg-card p-6 panel-float">
+          <div className="flex min-h-70 flex-col rounded-md border border-border bg-card p-6 panel-float">
             <AnimatePresence mode="wait">
               {!schema && !loading && (
                 <motion.div

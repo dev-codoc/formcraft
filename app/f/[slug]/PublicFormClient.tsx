@@ -58,15 +58,24 @@ export function PublicFormClient({ schema }: { schema: FormSchema }) {
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const res = await fetch(`/api/f/${schema.id}/submit`, {
+      // The submit route validates the body directly against a schema keyed by
+      // field id, so send the answers map as the top-level body (not { answers }).
+      const res = await fetch(`/api/submit/${schema.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify(answers),
       });
-      if (!res.ok) throw new Error("Submission failed");
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error || `Submission failed (${res.status})`);
+      }
       setSubmitted(true);
-    } catch {
-      setSubmitError("Something went wrong submitting your response. Please try again.");
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong submitting your response. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }

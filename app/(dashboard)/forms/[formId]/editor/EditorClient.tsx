@@ -11,7 +11,9 @@ import {
   Undo2,
   Redo2,
   ExternalLink,
+  Globe,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FieldPalette } from "@/components/builder/FieldPalette";
@@ -23,10 +25,41 @@ import { useFormBuilder, type FormSchema } from "@/hooks/useFormBuilder";
 interface EditorClientProps {
   initialSchema: FormSchema;
   formId: string;
+  slug: string;
+  initialPublished: boolean;
 }
 
-export function EditorClient({ initialSchema, formId }: EditorClientProps) {
+export function EditorClient({
+  initialSchema,
+  formId,
+  slug,
+  initialPublished,
+}: EditorClientProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const [published, setPublished] = useState(initialPublished);
+  const [publishing, setPublishing] = useState(false);
+
+  async function togglePublish() {
+    const next = !published;
+    setPublishing(true);
+    try {
+      const res = await fetch(`/api/forms/${formId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ published: next }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.error || `Request failed (${res.status})`);
+      setPublished(next);
+      toast.success(next ? "Form published — it's now live." : "Form unpublished.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't update publish status.",
+      );
+    } finally {
+      setPublishing(false);
+    }
+  }
 
   const {
     schema,
@@ -74,12 +107,35 @@ export function EditorClient({ initialSchema, formId }: EditorClientProps) {
             {showPreview ? "Hide preview" : "Preview"}
           </Button>
 
-          <Link href={`/f/${formId}`} target="_blank">
-            <Button size="sm" variant="outline" className="gap-1.5">
-              <ExternalLink className="h-3.5 w-3.5" />
-              Open live
-            </Button>
-          </Link>
+          {published && (
+            <Link href={`/f/${slug}`} target="_blank">
+              <Button size="sm" variant="outline" className="gap-1.5">
+                <ExternalLink className="h-3.5 w-3.5" />
+                Open live
+              </Button>
+            </Link>
+          )}
+
+          <Button
+            size="sm"
+            variant={published ? "ghost" : "default"}
+            onClick={togglePublish}
+            disabled={publishing}
+            className="gap-1.5"
+          >
+            {publishing ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Globe className="h-3.5 w-3.5" />
+            )}
+            {publishing
+              ? published
+                ? "Unpublishing…"
+                : "Publishing…"
+              : published
+                ? "Unpublish"
+                : "Publish"}
+          </Button>
         </div>
       </div>
 

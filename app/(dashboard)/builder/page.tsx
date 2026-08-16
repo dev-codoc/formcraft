@@ -137,11 +137,23 @@ export default function BuilderPage() {
           accentColor: schema.theme?.primaryColor ?? "#7C8B6F",
         }),
       });
-      if (!res.ok) throw new Error("Failed to create form");
-      const { form } = await res.json();
-      router.push(`/forms/${form._id}/editor`);
-    } catch {
-      setError("Couldn't save the form. Check your connection and try again.");
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        // Surface the real reason (401 = signed out, 400 = missing fields, 500 = server)
+        throw new Error(data?.error || `Couldn't save the form (${res.status})`);
+      }
+      if (!data?.form?._id) {
+        throw new Error("The server didn't return a saved form. Please try again.");
+      }
+
+      router.push(`/forms/${data.form._id}/editor`);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Couldn't save the form. Check your connection and try again.",
+      );
       setCreating(false);
     }
   }

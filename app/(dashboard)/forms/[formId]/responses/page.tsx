@@ -7,7 +7,7 @@ import { ResponsesClient } from "./ResponsesClient";
 import type { FormField } from "@/hooks/useFormBuilder";
 
 interface ResponsesPageProps {
-  params: { formId: string };
+  params: Promise<{ formId: string }>;
 }
 
 // Mongoose `.lean()` returns loosely-typed plain objects; describe the shape we
@@ -22,14 +22,15 @@ type LeanSubmission = {
 type LeanForm = { title: string; fields: FormField[] };
 
 export default async function ResponsesPage({ params }: ResponsesPageProps) {
+  const { formId } = await params;
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
   await connectDB();
-  const form = await Form.findOne({ _id: params.formId, userId: session.user.id }).lean();
+  const form = await Form.findOne({ _id: formId, userId: session.user.id }).lean();
   if (!form) notFound();
 
-  const submissions = await Submission.find({ formId: params.formId })
+  const submissions = await Submission.find({ formId: formId })
     .sort({ submittedAt: -1 })
     .lean();
 

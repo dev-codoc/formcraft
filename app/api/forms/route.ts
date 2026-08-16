@@ -17,27 +17,40 @@ export async function GET() {
 
 // POST /api/forms — create a new form
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'You must be signed in to create a form.' }, { status: 401 });
+    }
 
-  const body = await req.json();
-  const { title, description, fields, accentColor } = body;
+    const body = await req.json();
+    const { title, description, fields, accentColor } = body;
 
-  if (!title || !Array.isArray(fields) || fields.length === 0) {
-    return NextResponse.json({ error: 'Title and at least one field are required' }, { status: 400 });
+    if (!title || !Array.isArray(fields) || fields.length === 0) {
+      return NextResponse.json(
+        { error: 'A title and at least one field are required.' },
+        { status: 400 },
+      );
+    }
+
+    await connectDB();
+
+    const form = await Form.create({
+      title,
+      description,
+      fields,
+      accentColor,
+      userId: session.user.id,
+      slug: nanoid(8),
+      published: false,
+    });
+
+    return NextResponse.json({ form }, { status: 201 });
+  } catch (err) {
+    console.error('POST /api/forms failed:', err);
+    return NextResponse.json(
+      { error: 'Something went wrong saving the form. Please try again.' },
+      { status: 500 },
+    );
   }
-
-  await connectDB();
-  
-  const form = await Form.create({
-    title,
-    description,
-    fields,
-    accentColor,
-    userId: session.user.id,
-    slug: nanoid(8),
-    published: false,
-  });
-
-  return NextResponse.json({ form }, { status: 201 });
 }

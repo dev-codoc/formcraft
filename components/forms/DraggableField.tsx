@@ -2,7 +2,7 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Trash2, Type, Mail, Phone, Hash, AlignLeft, ChevronDown, CheckSquare, Calendar, Paperclip, CircleDot } from 'lucide-react';
+import { GripVertical, Trash2, Type, Mail, Phone, Hash, AlignLeft, ChevronDown, CheckSquare, Calendar, Paperclip, CircleDot, Star } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import type { FormField } from '@/models/Form';
@@ -18,6 +18,7 @@ const TYPE_ICONS: Record<FormField['type'], React.ComponentType<{ className?: st
   checkbox: CheckSquare,
   date: Calendar,
   file: Paperclip,
+  rating: Star,
 };
 
 interface DraggableFieldProps {
