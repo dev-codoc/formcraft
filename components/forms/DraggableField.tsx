@@ -55,7 +55,7 @@ export function DraggableField({ field, onUpdate, onDelete }: DraggableFieldProp
         <GripVertical className="h-4 w-4" />
       </button>
 
-      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-sm bg-accent text-primary">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-accent text-primary">
         <Icon className="h-4 w-4" />
       </div>
 
@@ -68,7 +68,7 @@ export function DraggableField({ field, onUpdate, onDelete }: DraggableFieldProp
         <span className="field-id">{field.type}</span>
       </div>
 
-      <div className="flex flex-shrink-0 items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         <span className="text-xs text-muted-foreground">Required</span>
         <Switch
           checked={field.required}
@@ -78,7 +78,7 @@ export function DraggableField({ field, onUpdate, onDelete }: DraggableFieldProp
 
       <button
         onClick={() => onDelete(field.id)}
-        className="flex-shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="shrink-0 rounded-sm text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="Delete field"
       >
         <Trash2 className="h-4 w-4" />
