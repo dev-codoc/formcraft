@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FormCraft
 
-## Getting Started
+**Describe your form in a sentence. Get a working form in seconds.**
 
-First, run the development server:
+FormCraft is an AI-first form builder. Type what you want to collect — "a customer feedback form for a coffee shop with a rating and an open comment" — and it drafts the fields, labels, and validation for you. Refine with a drag-and-drop editor, publish to a hosted page, and start collecting responses. No boilerplate, no schema wrangling.
+
+---
+
+## Why FormCraft
+
+Most form tools make you build every field by hand. FormCraft starts from intent. You write a prompt, an AI turns it into a structured form, and you spend your time refining instead of assembling. It is the difference between filling out a spreadsheet and describing what you actually need.
+
+- **Prompt to form in one step.** Natural-language generation produces a complete, sensible schema — not a blank canvas.
+- **Full control after generation.** Everything the AI makes is editable. Reorder, retitle, retype, and tune validation without touching code.
+- **Ship immediately.** Publish to a clean, hosted page at a shareable link and collect responses the same minute.
+
+---
+
+## Features
+
+- **AI form generation** — Turn a plain-English description into a structured form with typed fields, labels, options, and validation rules.
+- **Drag-and-drop builder** — Reorder fields, edit properties, and preview live. Eleven field types: text, long text, email, phone, number, select, radio, checkbox, date, file, and star rating.
+- **Autosave with undo/redo** — Every change is saved as you work, with full undo and redo history.
+- **Publish and host** — One click publishes your form to a hosted page at `/f/<slug>`. Unpublish just as easily.
+- **Response collection** — Submissions are validated server-side with Zod against your form's schema, then stored and ready to review.
+- **Dashboard and analytics** — Manage every form, browse responses, and view submission trends.
+- **Rate limiting** — Public submission endpoints are throttled per IP to keep abuse in check, and fail open so an infrastructure hiccup never blocks a real response.
+- **Authentication** — Email/password and Google sign-in, backed by secure JWT sessions.
+- **Billing built in** — Free, Pro, and Business plans with subscription checkout and signature-verified webhooks.
+
+---
+
+## How it works
+
+1. **Describe** — Write a sentence about the form you need.
+2. **Generate** — The AI drafts fields, types, and validation.
+3. **Refine** — Adjust anything in the drag-and-drop editor; changes autosave.
+4. **Publish** — Go live at a shareable link.
+5. **Collect** — Responses are validated, stored, and surfaced in your dashboard.
+
+---
+
+## Tech stack
+
+| Layer | Tools |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19, TypeScript |
+| Styling | Tailwind CSS v4, shadcn/ui, Radix UI, Framer Motion, Lucide |
+| Database | MongoDB with Mongoose |
+| Auth | NextAuth v5 (Google + credentials, JWT sessions) |
+| AI | OpenRouter chat completions |
+| Validation | Zod |
+| Builder | dnd-kit drag-and-drop, nanoid slugs |
+| Rate limiting | Upstash Redis + Ratelimit |
+| Billing | Razorpay subscriptions |
+| Charts & UX | Recharts, Sonner toasts, Geist font |
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18.18+ (or 20+)
+- A MongoDB database (local or Atlas)
+- An OpenRouter API key for AI generation
+
+### Setup
+
+```bash
+git clone <your-repo-url>
+cd formcraft
+npm install
+```
+
+Create a `.env` file in the project root:
+
+```bash
+# --- Required ---
+MONGODB_URI=your-mongodb-connection-string
+AUTH_SECRET=a-long-random-secret            # e.g. `openssl rand -base64 32`
+OPENROUTER_API_KEY=your-openrouter-key
+
+# --- Optional: Google sign-in (falls back to email/password if unset) ---
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# --- Optional: AI model + app URL ---
+OPENROUTER_MODEL=meta-llama/llama-3.1-70b-instruct   # default if unset
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# --- Optional: rate limiting (skipped entirely if unset) ---
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# --- Optional: billing (only needed for paid plans) ---
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
+RAZORPAY_PLAN_PRO_MONTHLY=
+RAZORPAY_PLAN_PRO_YEARLY=
+RAZORPAY_PLAN_BUSINESS_MONTHLY=
+RAZORPAY_PLAN_BUSINESS_YEARLY=
+```
+
+### Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Build for production with `npm run build` and serve with `npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Plans
 
-## Learn More
+| Plan | Price | Highlights |
+| --- | --- | --- |
+| **Free** | ₹0 | 3 forms, 100 responses/mo, 10 AI generations/mo |
+| **Pro** | ₹499/mo · ₹4,990/yr | Unlimited forms, 5,000 responses/mo, unlimited AI, no branding |
+| **Business** | ₹999/mo · ₹9,990/yr | Everything in Pro, 5 team seats, webhooks |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  (dashboard)/        Authenticated app — builder, editor, responses, billing
+  f/[slug]/           Public hosted form pages
+  api/                Route handlers (forms, submissions, billing)
+components/           UI primitives and builder components
+hooks/                Form builder state (autosave, undo/redo)
+lib/                  AI, database, rate limiting, Razorpay, validation
+models/               Mongoose models (Form, Submission)
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+FormCraft deploys cleanly to any platform that runs Next.js. On Vercel, import the repository, add the environment variables above, and deploy. Point `NEXT_PUBLIC_APP_URL` at your production domain and set your OAuth redirect and Razorpay webhook URLs to match.
+
+---
+
+Crafted with care by Devanshu Singh. Powered by Next.js and OpenRouter.
