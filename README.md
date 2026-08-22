@@ -49,6 +49,8 @@ Most form tools make you build every field by hand. FormCraft starts from intent
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f15859a2-0475-47e5-9b10-64f1d4cd472c" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f4ec8a32-8855-4d64-b997-298b4d70e035" />
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0c62d10f-0ad0-458f-8ab9-673235b2de56" />
+
 
 ## Tech stack
 
