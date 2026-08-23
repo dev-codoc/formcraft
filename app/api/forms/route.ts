@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 // GET /api/forms — list all forms for the logged-in user
 export async function GET() {
   const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
   const forms = await Form.find({ userId: session.user.id }).sort({ createdAt: -1 });
