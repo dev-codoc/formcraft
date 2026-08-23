@@ -26,6 +26,11 @@ export const metadata: Metadata = {
   title: 'FormCraft AI — Describe it. Ship it.',
   description:
     'AI-powered form builder. Describe your form in plain English, get a validated schema, embeddable link, and response analytics.',
+  icons: {
+    icon: '/favicon.png?v=2',
+    shortcut: '/favicon.png?v=2',
+    apple: '/favicon.png?v=2',
+  },
 };
 
 export default function RootLayout({
