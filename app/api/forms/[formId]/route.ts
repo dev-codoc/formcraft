@@ -7,7 +7,7 @@ import Form from '@/models/Form';
 export async function GET(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
   const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
   const form = await Form.findOne({ _id: formId, userId: session.user.id });
@@ -61,7 +61,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ fo
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
   const session = await auth();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   await connectDB();
 
