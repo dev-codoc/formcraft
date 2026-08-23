@@ -30,6 +30,13 @@ Most form tools make you build every field by hand. FormCraft starts from intent
 
 ---
 
+<img width="1897" height="1079" alt="Screenshot 2026-08-21 133219" src="https://github.com/user-attachments/assets/86a76da0-74cd-4f01-a093-88ef5c6addf6" />
+
+<img width="1894" height="998" alt="Screenshot 2026-08-21 133347" src="https://github.com/user-attachments/assets/a94c1f31-59fd-423f-b8e1-2713824f41c5" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/63add4c1-194e-41bd-97a8-79209a7e75ec" />
+
+
 ## How it works
 
 1. **Describe** — Write a sentence about the form you need.
@@ -39,6 +46,11 @@ Most form tools make you build every field by hand. FormCraft starts from intent
 5. **Collect** — Responses are validated, stored, and surfaced in your dashboard.
 
 ---
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f15859a2-0475-47e5-9b10-64f1d4cd472c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f4ec8a32-8855-4d64-b997-298b4d70e035" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0c62d10f-0ad0-458f-8ab9-673235b2de56" />
+
 
 ## Tech stack
 
